@@ -29,6 +29,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
        http
+               .csrf().disable() // for put,delete ,patch post method if we dont use this method spring security dont allow to us put,delete etc
                .authorizeRequests()// her request icin yetki sorgula
                .antMatchers("/","/Index","/css/*","/js/*").permitAll()// bu methodda belirtilenlere izin ver
                // free page nasil yapilir

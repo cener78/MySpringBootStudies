@@ -57,11 +57,11 @@ public class StudentBean05 {
         this.email = email;
     }
 
-    public LocalDate getDate() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDob(LocalDate date) {
         this.dob = date;
     }
 
