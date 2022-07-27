@@ -93,7 +93,7 @@ public class StudentBean05Service {
 
 
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sys?serverTimezone=UTC", "root", "2672li");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sys?serverTimezone=UTC", "root", "?");
         Statement st = con.createStatement();
 
 
