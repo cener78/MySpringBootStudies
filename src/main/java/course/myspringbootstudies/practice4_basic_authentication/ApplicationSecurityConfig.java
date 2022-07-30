@@ -3,6 +3,7 @@ package course.myspringbootstudies.practice4_basic_authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -13,6 +14,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordConfig passEncode;
@@ -33,6 +35,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                .authorizeRequests()// her request icin yetki sorgula
                .antMatchers("/","/Index","/css/*","/js/*").permitAll()// bu methodda belirtilenlere izin ver
                // free page nasil yapilir
+               //.antMatchers("/**").hasRole(ApplicationUserRole.ADMIN.name())
+
                .anyRequest() //herhangibir istek
                .authenticated()// dogrulamadan gecenler
                .and()
@@ -42,10 +46,22 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
-       UserDetails student= User.builder().username("c").password(passEncode.passSifrele().encode("2222")).roles("STUDENT").build();
+       UserDetails student= User.builder().username("c").password(passEncode.passSifrele().encode("2222"))
+               //.roles
+               .authorities(ApplicationUserRole.STUDENT.permit())
+               .build();
+
+
+
         UserDetails teacher= User.builder().username("e").password(passEncode.passSifrele().encode("3333")).roles("TEACHER").build();
         UserDetails manager= User.builder().username("z").password(passEncode.passSifrele().encode("4444")).roles("MANAGER").build();
-        UserDetails boss= User.builder().username("m").password(passEncode.passSifrele().encode("5555")).roles("BOSS").build();
+
+
+        UserDetails boss= User.builder().username("m").password(passEncode.passSifrele().encode("5555"))
+                //.roles("BOSS")
+                .authorities(ApplicationUserRole.ADMIN.permit())
+                .build();
+
         return new InMemoryUserDetailsManager(student,teacher,manager,boss);
     }
 }
